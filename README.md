@@ -1,16 +1,10 @@
 # flutter_expenses
 
-A new Flutter project.
+This Flutter application hosts a list of expenses, where each expense includes:
+- a note of what it is
+- a cost
+- and a date that it occurred
 
-## Getting Started
+You can scroll through the list and add expenses to it.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The list is able to handle an infinite number of expenses and only load the relevant ones as they render on the screen.
