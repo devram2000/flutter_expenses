@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './expense.dart';
+import 'add_expense.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 
@@ -36,7 +37,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   // list of users expenses
-  final List<Expense> _userExpenses = [];
+  final List<Expense> _addedExpenses = [];
+
+  int _index = 0;
 
   // creation of list of example expenses to test scroll functionality
   List<Expense> get _exampleExpenses {
@@ -44,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Expense> expenseList = [];
 
     // ids start after _userExpenses ids
-    int i = _userExpenses.length + 1;
+    int i = _addedExpenses.length + 1;
     Random rnd = Random();
     DateTime date = DateTime.now();
     
@@ -70,8 +73,22 @@ class _MyHomePageState extends State<MyHomePage> {
   // returns expenses list with _userExpenses and _exampleExpenses combined 
   // (remove _exampleExpenses from this statement if you don't want them)
   List<Expense> get _expenses {
-    return _userExpenses + _exampleExpenses;
+    return _addedExpenses + _exampleExpenses;
   }
+
+  // function to add a new expense to the list
+  void _addNewExpense(double cost, String note, DateTime date) {
+    final addedExpense = Expense(
+        id: _index,
+        cost: cost,
+        note: note,
+        date: date);
+    setState(() {
+      _addedExpenses.insert(0, addedExpense);
+      _index += 1;
+    });
+  }
+
 
 
 
@@ -86,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 10.0, bottom: 5),
-              // title of 'Your Expenses'
+              // Heading for 'Your Expenses'
               child: const Text(
                 'Your Expenses:',
                 style: TextStyle(
@@ -106,16 +123,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   // adds drop shadow
                   elevation: 5,
                   child: Container(
+                    // aligns text to center
                     alignment: Alignment.center, 
+                    // adds padding around expense text
                     padding: const EdgeInsets.symmetric(
                       vertical: 20,
                       horizontal: 5,
                     ),
+                    // Text with expense information in the format of Expense Note: Cost, Date
                     child: Text(
                       '${_expenses[index].note.toString()}: \$${_expenses[index].cost.toString()}, ${  DateFormat.yMd().format(_expenses[index].date) }',
                       style: const TextStyle(
                             fontSize: 18
-                            ),
+                      ),
+                      textAlign: TextAlign.center,
 
                     ),
                   ));
@@ -127,11 +148,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // button to open up new transaction popup
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+            showDialog(
+              context: context,
+              // uses AddExpense pop up dialogue in the add_expense.dart file
+              builder: (BuildContext context) => AddExpense(_addNewExpense),
+            );
+          },
+        child: const Icon(Icons.add),
+      ), 
     );
   }
 }
